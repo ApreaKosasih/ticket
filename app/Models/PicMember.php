@@ -14,8 +14,8 @@ class PicMember extends Model
     {
         return $this->belongsTo(Tickets::class,'id');
     }
-    public function users()
-    {
-        return $this->hasOne(Users::class,'id');
-    }
+    // public function users()
+    // {
+    //     return $this->hasOne(Users::class,'id');
+    // }
 }

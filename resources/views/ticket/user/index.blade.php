@@ -1,3 +1,21 @@
+@if( Session::has('type_modal') && Session::has('message') )
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="liveToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header <?php echo (Session::get('type_modal')=="success" ? "bg-success":"bg-danger")?>">
+                <strong class="me-auto text-white">Notifikasi</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                {{ Session::get('message') }}
+            </div>
+        </div>
+    </div>
+    @php
+        Session::forget('type_modal');
+        Session::forget('message');
+    @endphp
+@endif
+
 <div class="row">
     <div class="col-12 bg-light p-5 rounded">
         <div class="row">
@@ -11,23 +29,6 @@
                     <button class="btn btn-lg btn-secondary pull-right" role="button">Tambah Tiket</button>
                 @endif
             </div>
-            @if( Session::has('type_modal') && Session::has('message') )
-                <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-                    <div id="liveToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-                        <div class="toast-header <?php echo (Session::get('type_modal')=="success" ? "bg-success":"bg-danger")?>">
-                            <strong class="me-auto text-white">Notifikasi</strong>
-                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                        </div>
-                        <div class="toast-body">
-                            {{ Session::get('message') }}
-                        </div>
-                    </div>
-                </div>
-                @php
-                    Session::forget('type_modal');
-                    Session::forget('message');
-                @endphp
-            @endif
         </div>
         <div class="row">
             <div class="col-12">
@@ -49,7 +50,7 @@
                         @foreach ($tickets->pribadi as $index => $ticket)
                         <tr>
                             <td><?php echo $index+1; ?></td>
-                            <td><?php echo \Carbon\Carbon::parse($ticket->createdAt)->format("l, j F Y"); ?></td>
+                            <td><?php echo \Carbon\Carbon::parse($ticket->created_at)->format("l, j F Y"); ?></td>
                             <td>
                                 <?php echo $ticket->no_ticket; ?>
                                 <br>
@@ -90,7 +91,7 @@
                                 ?>
                             </td>
                             <td>
-                                <?php echo ($ticket->pic==null? "Belum ada PIC":$ticket->pic->nama); ?>
+                                <?php echo ( count($ticket->userPic)==0? "Belum ada PIC":$ticket->userPic[0]->nama_karyawan); ?>
                             </td>
                             <td>
                                 <?php

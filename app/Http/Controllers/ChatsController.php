@@ -28,6 +28,7 @@ class ChatsController extends Controller
             $chat->foto = $req->file('foto')->getClientOriginalName();
             $req->file('foto')->move(public_path() . '/chat',$req->file('foto')->getClientOriginalName());
         }
+        $chat->createdBy = Session::get('id_user');
         // dd($chat);
         
         if($chat->save()){

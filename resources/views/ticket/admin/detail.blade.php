@@ -118,7 +118,7 @@
                 </div>
             </div>
         </div>
-        @if( count($ticket->userPic)>0 && $ticket->status==1 )
+        @if( count($ticket->userPic)>0 && $ticket->status==1 && $ticket->user[0]->nik != Session::get('id_user'))
             <div class="row">
                 <div class="col-12">
                     <div class="card text-dark bg-light mb-3">

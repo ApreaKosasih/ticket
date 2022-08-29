@@ -1,3 +1,86 @@
-operator : teknisi
-admin : 1-4
-user: sisanya
+{ //admin [IT]
+    "nik": "SG.0156.2013", //080893
+    "nama_karyawan": "M.A Fajar Wangi",
+    "divisi": {
+        "id": "4",
+        "nama": "IT"
+    },
+    "jabatan": {
+        "id": "67",
+        "nama": "Manager Muda Server dan Networking"
+    },
+    "level": {
+        "id": "4",
+        "nama": "Manager"
+    }
+}
+
+{
+    "nik": "SG.0029.2007", //7767
+    "nama_karyawan": "Rahmadi Eko Pramono",
+    "divisi": {
+        "id": "4",
+        "nama": "IT"
+    },
+    "jabatan": {
+        "id": "68",
+        "nama": "Manager Muda Pengadaan dan Maintenance Hardware"
+    },
+    "level": {
+        "id": "4",
+        "nama": "Manager"
+    }
+}
+
+// operator [IT]
+{
+            "nik": "SG.0728.2022", //473065
+            "nama_karyawan": "Adam Furqon",
+            "divisi": {
+                "id": "4",
+                "nama": "IT"
+            },
+            "jabatan": {
+                "id": "31",
+                "nama": "Staff IT"
+            },
+            "level": {
+                "id": "7",
+                "nama": "Staff"
+            }
+}
+
+// user [IT]
+{
+    "nik": "SG.0534.2019", //552424
+    "nama_karyawan": "Daniyal Abdul Hafidz",
+    "divisi": {
+        "id": "4",
+        "nama": "IT"
+    },
+    "jabatan": {
+        "id": "31",
+        "nama": "Staff IT"
+    },
+    "level": {
+        "id": "8",
+        "nama": "Kepala Seksi"
+    }
+}
+
+{ //user
+    "nik": "SG.0052.2009", //115850
+    "nama_karyawan": "Adi Supoyo",
+    "divisi": {
+        "id": "3",
+        "nama": "Direksi"
+    },
+    "jabatan": {
+        "id": "143",
+        "nama": null
+    },
+    "level": {
+        "id": "3",
+        "nama": "Direksi"
+    }
+}

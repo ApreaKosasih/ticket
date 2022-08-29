@@ -31,6 +31,13 @@
                 <h1>Tiket</h1>
                 <h5>(Tugas)</h5>
             </div>
+            <div class="col-2">
+                @if ($tickets->total_waiting<=3)
+                    <a class="btn btn-lg btn-primary pull-right" href="{{ route('ticket.add') }}" role="button">Tambah Tiket</a>
+                @else
+                    <button class="btn btn-lg btn-secondary pull-right" role="button">Tambah Tiket</button>
+                @endif
+            </div>
         </div>
         <div class="row">
             <div class="col-12">
@@ -45,13 +52,14 @@
                             <td>Foto</td>
                             <td>PIC</td>
                             <td>Status</td>
+                            <td>Aksi</td>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($tickets->tugas as $index => $ticket)
                         <tr>
                             <td><?php echo $index+1; ?></td>
-                            <td><?php echo \Carbon\Carbon::parse($ticket->createdAt)->format("l, j F Y"); ?></td>
+                            <td><?php echo \Carbon\Carbon::parse($ticket->created_at)->format("l, j F Y"); ?></td>
                             <td>
                                 <?php echo $ticket->no_ticket; ?>
                                 <br>
@@ -92,10 +100,10 @@
                                 ?>
                             </td>
                             <td>
-                                @if ($ticket->pic==null)
+                            @if (count($ticket->userPic)==0)
                                     <button type="button" class="btn btn-primary AddMember" data-url="{{ route('ticket.pic_member.create',['id'=>$ticket->id]) }}" data-bs-toggle="modal" data-bs-target=".modalPIC">Tambah PIC</button>
                                 @else
-                                    {{ $ticket->pic->nama }}
+                                    {{ $ticket->userPic[0]->nama_karyawan }}
                                 @endif
                             </td>
                             <td>
@@ -116,6 +124,18 @@
                                 <?php
                                     }
                                 ?>
+                            </td>
+                            <td>
+                                @if (
+                                    ($ticket->user[0]->divisi->id==4 && in_array($ticket->user[0]->level->id, [1,2,3,4])) &&
+                                    ($ticket->userPic[0]->divisi->id==4 && in_array($ticket->userPic[0]->level->id, [1,2,3,4])) &&
+                                    $ticket->user[0]->nik != Session::get('id_user')
+                                )
+                                    <a href="{{ route('ticket.detail', ['id'=> $ticket->id]) }}" class="btn btn-primary">detail</a>
+                                    @if ($ticket->status != 2)
+                                        <a href="{{ route('ticket.destroy', ['id'=> $ticket->id]) }}" class="btn btn-danger">tutup tiket</a>        
+                                    @endif
+                                @endif
                             </td>
                         </tr>
                         @endforeach
@@ -146,13 +166,14 @@
                             <td>Foto</td>
                             <td>PIC</td>
                             <td>Status</td>
+                            <td>Aksi</td>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($tickets->pribadi as $index => $ticket)
                         <tr>
                             <td><?php echo $index+1; ?></td>
-                            <td><?php echo \Carbon\Carbon::parse($ticket->createdAt)->format("l, j F Y"); ?></td>
+                            <td><?php echo \Carbon\Carbon::parse($ticket->created_at)->format("l, j F Y"); ?></td>
                             <td>
                                 <?php echo $ticket->no_ticket; ?>
                                 <br>
@@ -193,11 +214,7 @@
                                 ?>
                             </td>
                             <td>
-                                @if ($ticket->pic==null)
-                                    <button type="button" class="btn btn-primary AddMember" data-url="{{ route('ticket.pic_member.create',['id'=>$ticket->id]) }}" data-bs-toggle="modal" data-bs-target=".modalPIC">Tambah PIC</button>
-                                @else
-                                    {{ $ticket->pic->nama }}
-                                @endif
+                                <?php echo ( count($ticket->userPic)==0? "Belum ada PIC":$ticket->userPic[0]->nama_karyawan); ?>
                             </td>
                             <td>
                                 <?php
@@ -217,6 +234,12 @@
                                 <?php
                                     }
                                 ?>
+                            </td>
+                            <td>
+                                <a href="{{ route('ticket.detail', ['id'=> $ticket->id]) }}" class="btn btn-primary">detail</a>
+                                @if ($ticket->status != 2)
+                                    <a href="{{ route('ticket.destroy', ['id'=> $ticket->id]) }}" class="btn btn-danger">tutup tiket</a>        
+                                @endif
                             </td>
                         </tr>
                         @endforeach
@@ -242,7 +265,7 @@
                         <select name="pic" class="form-control MainPIC" required>
                             <option value="">-- Pilih PIC --</option>
                             @foreach ($users as $user)
-                                <option value="{{ $user->id }}">{{ $user->nama }}</option>
+                                <option value="{{ $user->nik }}">{{ $user->nama_karyawan }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -251,7 +274,7 @@
                         <select name="pic_member[]" class="form-control MemberPIC" multiple>
                             <option value="">-- Pilih PIC Member --</option>
                             @foreach ($users as $user)
-                                <option value="{{ $user->id }}">{{ $user->nama }}</option>
+                                <option value="{{ $user->nik }}">{{ $user->nama_karyawan }}</option>
                             @endforeach
                         </select>
                     </div>

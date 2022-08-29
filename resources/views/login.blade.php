@@ -23,7 +23,7 @@
                             <form action="{{ route('dologin') }}" method="post">
                                 {{ csrf_field() }}
                                 <div class="input-group mb-3">
-                                    <input type="text" class="form-control" name="nik" placeholder="NIK" required>
+                                    <input type="text" class="form-control" name="username" placeholder="Username" required>
                                 </div>
                                 <div class="input-group mb-3">
                                     <input type="password" class="form-control" name="password" placeholder="Password" required>

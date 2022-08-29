@@ -45,7 +45,7 @@
                     <div class="card-body">
                         <h5 class="card-title"></h5>
                         <p class="card-text">
-                            <label>Tanggal:</label> {{ $ticket->createdAt }} <br>
+                            <label>Tanggal:</label> {{ \Carbon\Carbon::parse($ticket->created_at)->format("l, j F Y") }} <br>
                             <label>Judul:</label> {{ $ticket->judul }} <br>
                             <label>Deskripsi:</label> {{ $ticket->deskripsi }} <br>
                             <label>Foto:</label> 
@@ -102,14 +102,14 @@
                             <br>
                             <label>PIC:</label>
                             <?php
-                                if($ticket->pic == null){
+                                if(count($ticket->userPic)==0){
                             ?>
                                 Belum ditunjuk oleh admin
                             <?php
                                 }
                                 else{
                             ?>
-                                {{ $ticket->pic->nama }}
+                                {{ $ticket->userPic[0]->nama_karyawan }}
                             <?php
                                 }
                             ?>
@@ -125,9 +125,21 @@
                         <form action="{{ route('ticket.chat.create',['id'=>$ticket->id]) }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <label>Pesan</label>
-                            <input type="text" name="pesan" class="form-control" required @if($ticket->status==0 || $ticket->id_user_pic == null || $ticket->status==2) {{ "disabled" }} @endif>
-                            <input type="file" name="foto" class="form-control" @if($ticket->status==0 || $ticket->id_user_pic == null || $ticket->status==2) {{ "disabled" }} @endif>
-                            <input type="submit" value="Kirim" class="btn btn-primary" @if($ticket->status==0 || $ticket->id_user_pic == null || $ticket->status==2) {{ "disabled" }} @endif>
+                            <input type="text" name="pesan" class="form-control" required @if(
+                                $ticket->status==0 || 
+                                count($ticket->userPic) == 0 || 
+                                $ticket->status==2
+                            ) {{ "disabled" }} @endif>
+                            <input type="file" name="foto" class="form-control" @if(
+                                $ticket->status==0 || 
+                                count($ticket->userPic) == 0 || 
+                                $ticket->status==2
+                            ) {{ "disabled" }} @endif>
+                            <input type="submit" value="Kirim" class="btn btn-primary" @if(
+                                $ticket->status==0 || 
+                                count($ticket->userPic) == 0 || 
+                                $ticket->status==2
+                            ) {{ "disabled" }} @endif>
                         </form>
                     </div>
                     <div class="card-header">
@@ -142,15 +154,20 @@
                             Upss belum ada percakapan dengan PIC
                         @else
                             @foreach ($chats as $chat)
-                                @if ($chat->from_name->id==$id_user)
+                                @if (count($chat->from_user)==0)
                                     <div class="text-start">
                                         <div class="card-header">
-                                            <label><?php echo $chat->from_name->nama; ?></label></b>
+                                            <label>N/A</label></b>
+                                        </div>
+                                @elseif ($chat->from_user[0]->nik==$id_user)
+                                    <div class="text-start">
+                                        <div class="card-header">
+                                            <label><?php echo $chat->from_user[0]->nama_karyawan; ?></label></b>
                                         </div>
                                 @else
                                     <div class="text-end">
                                         <div class="card-header">
-                                            <label><?php echo $chat->from_name->nama; ?></label></b>
+                                            <label><?php echo $chat->from_user[0]->nama_karyawan; ?></label></b>
                                         </div>
                                 @endif
                                         <div class="card-body">

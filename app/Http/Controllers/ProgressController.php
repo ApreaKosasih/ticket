@@ -9,11 +9,12 @@ use Session;
 class ProgressController extends Controller
 {
     public function create(Request $req,$id_ticket){
-        $chat = new Progress();
-        $chat->id_ticket = $id_ticket;
-        $chat->deskripsi = $req->progress;
+        $progress = new Progress();
+        $progress->id_ticket = $id_ticket;
+        $progress->deskripsi = $req->progress;
+        $progress->createdBy = Session::get('id_user');
         
-        if($chat->save()){
+        if($progress->save()){
             session(['type_modal' => 'success', 'message' => 'berhasil simpan perkembangan']);
             return redirect()->route('ticket.detail',['id'=> $id_ticket]);
         }
